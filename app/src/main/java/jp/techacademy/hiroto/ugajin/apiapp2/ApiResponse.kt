@@ -1,8 +1,6 @@
 package jp.techacademy.hiroto.ugajin.apiapp2
 import com.squareup.moshi.JsonClass
-
 import com.squareup.moshi.Json
-
 
 @JsonClass(generateAdapter = true)
 data class ApiResponse(
@@ -12,26 +10,20 @@ data class ApiResponse(
 
 @JsonClass(generateAdapter = true)
 data class Results(
-
     @Json(name = "shop")
     val shop: List<Shop>
 )
 
 @JsonClass(generateAdapter = true)
 data class Shop(
-
     @Json(name = "coupon_urls")
     val couponUrls: CouponUrls,
-
     @Json(name = "id")
     val id: String,
-
     @Json(name = "logo_image")
     val logoImage: String,
-
     @Json(name = "name")
-    val name: String,
-
+    val name: String
 )
 
 @JsonClass(generateAdapter = true)
