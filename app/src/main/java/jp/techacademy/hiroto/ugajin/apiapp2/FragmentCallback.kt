@@ -1,6 +1,6 @@
 package jp.techacademy.hiroto.ugajin.apiapp2
 
-class FragmentCallback {
+interface FragmentCallback {
     // お気に入り追加時の処理
     fun onAddFavorite(shop: Shop)
 
