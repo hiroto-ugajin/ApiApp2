@@ -9,12 +9,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import jp.techacademy.hiroto.ugajin.apiapp2.databinding.RecyclerFavoriteBinding
 
-class FavoriteAdapter: ListAdapter<FavoriteShop, RecyclerView.ViewHolder>(FavoriteCallback())  {
+class FavoriteAdapter : ListAdapter<FavoriteShop, FavoriteItemViewHolder>(FavoriteCallback()) {
+
+    // お気に入り画面から削除するときのコールバック（ApiFragmentへ通知するメソッド)
+    var onClickDeleteFavorite: ((FavoriteShop) -> Unit)? = null
 
     /**
      * ViewHolderを生成して返す
      */
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavoriteItemViewHolder {
+        // ViewBindingを引数にApiItemViewHolderを生成
         val view =
             RecyclerFavoriteBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return FavoriteItemViewHolder(view)
@@ -23,11 +27,14 @@ class FavoriteAdapter: ListAdapter<FavoriteShop, RecyclerView.ViewHolder>(Favori
     /**
      * 指定された位置（position）のViewにFavoriteShopの情報をセットする
      */
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: FavoriteItemViewHolder, position: Int) {
         holder.bind(getItem(position), position, this)
     }
 }
 
+/**
+ * お気に入りが登録されているときのリスト
+ */
 class FavoriteItemViewHolder(private val binding: RecyclerFavoriteBinding) :
     RecyclerView.ViewHolder(binding.root) {
     fun bind(favoriteShop: FavoriteShop, position: Int, adapter: FavoriteAdapter) {
@@ -52,8 +59,7 @@ class FavoriteItemViewHolder(private val binding: RecyclerFavoriteBinding) :
             adapter.notifyItemChanged(position)
         }
     }
-    }
-
+}
 
 /**
  * データの差分を確認するクラス
@@ -68,4 +74,3 @@ internal class FavoriteCallback : DiffUtil.ItemCallback<FavoriteShop>() {
         return oldItem.equals(newItem)
     }
 }
-
