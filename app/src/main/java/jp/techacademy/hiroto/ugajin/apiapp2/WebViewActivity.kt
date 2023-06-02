@@ -4,7 +4,11 @@ import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.view.View
+import android.widget.Button
 import jp.techacademy.hiroto.ugajin.apiapp2.databinding.ActivityWebViewBinding
+import android.widget.Toast
 
 class WebViewActivity : AppCompatActivity() {
 
@@ -17,6 +21,7 @@ class WebViewActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.webView.loadUrl(intent.getStringExtra(KEY_URL).toString())
+        binding.button1.setOnClickListener()
     }
 
     companion object {
@@ -29,5 +34,16 @@ class WebViewActivity : AppCompatActivity() {
                 )
             )
         }
+    }
+}
+
+private fun Button.setOnClickListener() {
+    val isFavorite = FavoriteShop.findBy(id) != null
+
+    if (isFavorite) {
+        Toast.makeText(this, R.string.registered_favorite, Toast.LENGTH_SHORT)
+            .show()
+    } else {
+        Log.d("mylog", "登録ボタンをタップしました")
     }
 }

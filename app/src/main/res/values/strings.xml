@@ -11,4 +11,8 @@
     <string name="delete_favorite_dialog_title">お気に入りの削除</string>
     <string name="delete_favorite_dialog_message">お気に入りを削除しますか？</string>
     <string name="empty_favorite">お気に入りはまだ登録されていません。</string>
+<!--浩人作追加-->
+    <string name="registered_favorite">すでに登録されています。</string>
+<!--    <string name="Button 1">お気に入りに登録</string>-->
+<!--    <string name="Button 2" >お気に入りから削除</string>-->
 </resources>
