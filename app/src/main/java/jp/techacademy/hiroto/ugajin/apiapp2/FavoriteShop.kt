@@ -97,5 +97,21 @@ open class FavoriteShop(id: String, imageUrl: String, name: String, url: String)
             // Realmデータベースとの接続を閉じる
             realm.close()
         }
+
+        /**
+         * 指定されたURLがお気に入りの中に存在するか判定する
+         */
+        fun isUrlInFavorites(url: String): Boolean {
+            val favoriteShops = findAll()
+            return favoriteShops.any { it.url == url }
+        }
+
+        /**
+         * 指定されたURLのお気に入りショップを取得する
+         */
+        fun findByUrl(url: String): FavoriteShop? {
+            val favoriteShops = findAll()
+            return favoriteShops.find { it.url == url }
+        }
     }
 }

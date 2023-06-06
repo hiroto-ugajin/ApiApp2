@@ -5,10 +5,12 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.View
-import android.widget.Button
-import jp.techacademy.hiroto.ugajin.apiapp2.databinding.ActivityWebViewBinding
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import android.widget.Toast
+import jp.techacademy.hiroto.ugajin.apiapp2.FavoriteShop.Companion.findByUrl
+import jp.techacademy.hiroto.ugajin.apiapp2.databinding.ActivityWebViewBinding
+import jp.techacademy.hiroto.ugajin.apiapp2.FavoriteShop.Companion.isUrlInFavorites
 
 class WebViewActivity : AppCompatActivity() {
 
@@ -17,11 +19,57 @@ class WebViewActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityWebViewBinding.inflate(layoutInflater)
-//        setContentView(R.layout.activity_web_view)
         setContentView(binding.root)
 
-        binding.webView.loadUrl(intent.getStringExtra(KEY_URL).toString())
-        binding.button1.setOnClickListener()
+            binding.webView.loadUrl(intent.getStringExtra(KEY_URL).toString())
+        val couponUrls = intent.getStringExtra(KEY_URL).toString()
+
+        binding.webView.webViewClient = MyWebViewClient()
+
+        binding.button1.setOnClickListener() {
+            var isFavorite = isUrlInFavorites(couponUrls)
+            if (isFavorite) {
+                Log.d("my log", "既に、登録済みです")
+
+            } else {
+                Log.d("my log", "登録ボタンをタップしました")
+//                FavoriteShop.insert(favoriteShop)
+//                isFavorite = !isFavorite
+            }
+        }
+
+        binding.button2.setOnClickListener() {
+            var isFavorite = isUrlInFavorites(couponUrls)
+            val foundShop: FavoriteShop? = findByUrl(couponUrls)
+            if (isFavorite) {
+                Log.d("my log", "削除ボタンをタップしました")
+//                FavoriteShop.delete(favoriteShop)
+//                isFavorite = !isFavorite
+            } else {
+                Log.d("my log", "元々、お気に入りではありません")
+            }
+        }
+    }
+
+    private inner class MyWebViewClient : WebViewClient() {
+        override fun onPageFinished(view: WebView?, url: String?) {
+            super.onPageFinished(view, url)
+
+            // ページの読み込み完了時に実行される処理
+            val currentUrl = url ?: ""
+            val shopId = extractShopIdFromUrl(currentUrl)
+
+            // お気に入りの判定処理を行う
+            val isFavorite = FavoriteShop.findBy(shopId) != null
+
+            // ここでisFavoriteを利用して適切な処理を行う
+        }
+    }
+
+    private fun extractShopIdFromUrl(url: String): String {
+        val regex = Regex("""/id(\d+)/""") // URLから"/id数字/"の部分を抽出する正規表現パターン
+        val matchResult = regex.find(url)
+        return matchResult?.groupValues?.getOrNull(1) ?: ""
     }
 
     companion object {
@@ -37,13 +85,3 @@ class WebViewActivity : AppCompatActivity() {
     }
 }
 
-private fun Button.setOnClickListener() {
-    val isFavorite = FavoriteShop.findBy(id) != null
-
-    if (isFavorite) {
-        Toast.makeText(this, R.string.registered_favorite, Toast.LENGTH_SHORT)
-            .show()
-    } else {
-        Log.d("mylog", "登録ボタンをタップしました")
-    }
-}

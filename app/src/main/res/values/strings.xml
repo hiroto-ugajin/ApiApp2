@@ -13,6 +13,7 @@
     <string name="empty_favorite">お気に入りはまだ登録されていません。</string>
 <!--浩人作追加-->
     <string name="registered_favorite">すでに登録されています。</string>
+    <string name="unregistered_favorite">元々、登録されていません。</string>
 <!--    <string name="Button 1">お気に入りに登録</string>-->
 <!--    <string name="Button 2" >お気に入りから削除</string>-->
 </resources>
