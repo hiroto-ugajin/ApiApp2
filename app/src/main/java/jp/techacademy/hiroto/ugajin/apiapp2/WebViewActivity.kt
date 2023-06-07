@@ -16,6 +16,8 @@ class WebViewActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityWebViewBinding
 
+    private var favoriteShop: FavoriteShop = FavoriteShop()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityWebViewBinding.inflate(layoutInflater)
@@ -30,11 +32,11 @@ class WebViewActivity : AppCompatActivity() {
             var isFavorite = isUrlInFavorites(couponUrls)
             if (isFavorite) {
                 Log.d("my log", "既に、登録済みです")
-
             } else {
-                Log.d("my log", "登録ボタンをタップしました")
-//                FavoriteShop.insert(favoriteShop)
+                FavoriteShop.insert(favoriteShop)
+//                Log.d("my log", "登録ボタンをタップしました")
 //                isFavorite = !isFavorite
+
             }
         }
 
@@ -42,9 +44,10 @@ class WebViewActivity : AppCompatActivity() {
             var isFavorite = isUrlInFavorites(couponUrls)
             val foundShop: FavoriteShop? = findByUrl(couponUrls)
             if (isFavorite) {
-                Log.d("my log", "削除ボタンをタップしました")
-//                FavoriteShop.delete(favoriteShop)
+                FavoriteShop.delete(favoriteShop.id)
+//                Log.d("my log", "削除ボタンをタップしました")
 //                isFavorite = !isFavorite
+
             } else {
                 Log.d("my log", "元々、お気に入りではありません")
             }
