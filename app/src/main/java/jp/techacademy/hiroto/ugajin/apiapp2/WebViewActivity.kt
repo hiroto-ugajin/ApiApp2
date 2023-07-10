@@ -34,8 +34,8 @@ class WebViewActivity : AppCompatActivity() {
                 Log.d("my log", "既に、登録済みです")
             } else {
                 FavoriteShop.insert(favoriteShop)
-//                Log.d("my log", "登録ボタンをタップしました")
-//                isFavorite = !isFavorite
+                Log.d("my log", "登録ボタンをタップしました")
+                isFavorite = !isFavorite
 
             }
         }
