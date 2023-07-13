@@ -4,84 +4,59 @@ import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.webkit.WebView
-import android.webkit.WebViewClient
-import android.widget.Toast
-import jp.techacademy.hiroto.ugajin.apiapp2.FavoriteShop.Companion.findByUrl
 import jp.techacademy.hiroto.ugajin.apiapp2.databinding.ActivityWebViewBinding
-import jp.techacademy.hiroto.ugajin.apiapp2.FavoriteShop.Companion.isUrlInFavorites
 
 class WebViewActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityWebViewBinding
 
-    private var favoriteShop: FavoriteShop = FavoriteShop()
+    private var favoriteShop: FavoriteShop = FavoriteShop() // 課題:クーポン詳細ページでもお気に入りの追加削除
+    private var isFavorite = false // 課題:クーポン詳細ページでもお気に入りの追加削除
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityWebViewBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-            binding.webView.loadUrl(intent.getStringExtra(KEY_URL).toString())
-        val couponUrls = intent.getStringExtra(KEY_URL).toString()
+//        binding.webView.loadUrl(intent.getStringExtra(KEY_URL).toString())
+        // 課題:クーポン詳細ページでもお気に入りの追加削除
+        // API Level33で非推奨だがAPI24以降から対応するため使用
+        @Suppress("DEPRECATION")
+        favoriteShop =
+            intent.getSerializableExtra(KEY_FAVORITE_SHOP) as? FavoriteShop ?: return { finish() }()
+        binding.webView.loadUrl(favoriteShop.url)
 
-        binding.webView.webViewClient = MyWebViewClient()
+        // お気に入り状態を取得
+        isFavorite = FavoriteShop.findBy(favoriteShop.id) != null
 
-        binding.button1.setOnClickListener() {
-            var isFavorite = isUrlInFavorites(couponUrls)
-            if (isFavorite) {
-                Log.d("my log", "既に、登録済みです")
-            } else {
-                FavoriteShop.insert(favoriteShop)
-                Log.d("my log", "登録ボタンをタップしました")
+        // 星の処理
+        binding.favoriteImageView.apply {
+            // 白抜きの星を設定
+            setImageResource(if (isFavorite) R.drawable.ic_star else R.drawable.ic_star_border)
+
+            // 星をタップ（クリック）した時の処理
+            setOnClickListener {
                 isFavorite = !isFavorite
-
-            }
-        }
-
-        binding.button2.setOnClickListener() {
-            var isFavorite = isUrlInFavorites(couponUrls)
-            val foundShop: FavoriteShop? = findByUrl(couponUrls)
-            if (isFavorite) {
-                FavoriteShop.delete(favoriteShop.id)
-//                Log.d("my log", "削除ボタンをタップしました")
-//                isFavorite = !isFavorite
-
-            } else {
-                Log.d("my log", "元々、お気に入りではありません")
+                // タップ後の状態を反映
+                setImageResource(if (isFavorite) R.drawable.ic_star else R.drawable.ic_star_border)
+                if (isFavorite)
+                    FavoriteShop.insert(favoriteShop)
+                else
+                    FavoriteShop.delete(favoriteShop.id)
             }
         }
     }
 
-    private inner class MyWebViewClient : WebViewClient() {
-        override fun onPageFinished(view: WebView?, url: String?) {
-            super.onPageFinished(view, url)
-
-            // ページの読み込み完了時に実行される処理
-            val currentUrl = url ?: ""
-            val shopId = extractShopIdFromUrl(currentUrl)
-
-            // お気に入りの判定処理を行う
-            val isFavorite = FavoriteShop.findBy(shopId) != null
-
-            // ここでisFavoriteを利用して適切な処理を行う
-        }
-    }
-
-    private fun extractShopIdFromUrl(url: String): String {
-        val regex = Regex("""/id(\d+)/""") // URLから"/id数字/"の部分を抽出する正規表現パターン
-        val matchResult = regex.find(url)
-        return matchResult?.groupValues?.getOrNull(1) ?: ""
-    }
 
     companion object {
-        private const val KEY_URL = "key_url"
-        fun start(activity: Activity, url: String) {
+        private const val KEY_FAVORITE_SHOP = "key_favorite_shop" // 課題:クーポン詳細ページでもお気に入りの追加削除
+
+        // 課題:クーポン詳細ページでもお気に入りの追加削除
+        fun start(activity: Activity, favoriteShop: FavoriteShop) {
             activity.startActivity(
                 Intent(activity, WebViewActivity::class.java).putExtra(
-                    KEY_URL,
-                    url
+                    KEY_FAVORITE_SHOP,
+                    favoriteShop
                 )
             )
         }

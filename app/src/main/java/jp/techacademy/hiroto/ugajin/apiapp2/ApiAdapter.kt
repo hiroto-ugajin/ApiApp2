@@ -16,15 +16,14 @@ import jp.techacademy.hiroto.ugajin.apiapp2.databinding.RecyclerFavoriteBinding
  */
 class ApiAdapter : ListAdapter<Shop, ApiItemViewHolder>(ApiItemCallback())  {
 
-
     // 一覧画面から登録するときのコールバック（FavoriteFragmentへ通知するメソッド)
     var onClickAddFavorite: ((Shop) -> Unit)? = null
 
     // 一覧画面から削除するときのコールバック（ApiFragmentへ通知するメソッド)
     var onClickDeleteFavorite: ((Shop) -> Unit)? = null
 
-    // Itemを押したときのメソッド
-    var onClickItem: ((String) -> Unit)? = null
+//    var onClickItem: ((String) -> Unit)? = null // Itemを押したときのメソッド
+    var onClickItem: ((Shop) -> Unit)? = null // 課題:クーポン詳細ページでもお気に入りの追加削除
 
     /**
      * ViewHolderを生成して返す
@@ -43,6 +42,7 @@ class ApiAdapter : ListAdapter<Shop, ApiItemViewHolder>(ApiItemCallback())  {
         holder.bind(getItem(position), position, this)
     }
 }
+
 /**
  * リスト内の1行の内容を保持する
  */
@@ -58,11 +58,16 @@ class ApiItemViewHolder(private val binding: RecyclerFavoriteBinding) :
                 )
             )
             setOnClickListener {
-                adapter.onClickItem?.invoke(if (shop.couponUrls.sp.isNotEmpty()) shop.couponUrls.sp else shop.couponUrls.pc)
+//                adapter.onClickItem?.invoke(if (shop.couponUrls.sp.isNotEmpty()) shop.couponUrls.sp else shop.couponUrls.pc)
+                adapter.onClickItem?.invoke(shop) // // 課題:クーポン詳細ページでもお気に入りの追加削除
             }
         }
+
         // nameTextViewのtextプロパティに代入されたオブジェクトのnameプロパティを代入
         binding.nameTextView.text = shop.name
+
+        // 課題：住所を表示
+        binding.addressTextView.text = shop.address
 
         // Picassoライブラリを使い、imageViewにdata.logoImageのurlの画像を読み込ませる
         Picasso.get().load(shop.logoImage).into(binding.imageView)

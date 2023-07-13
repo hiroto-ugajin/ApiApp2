@@ -45,8 +45,26 @@ class MainActivity : AppCompatActivity(), FragmentCallback {
         })
     }
 
-    override fun onClickItem(url: String) {
-        WebViewActivity.start(this, url)
+//    override fun onClickItem(url: String) {
+//        WebViewActivity.start(this, url)
+//    }
+
+
+
+
+    // 課題:クーポン詳細ページでもお気に入りの追加削除
+    override fun onClickItem(favoriteShop: FavoriteShop) {
+        WebViewActivity.start(this, favoriteShop)
+    }
+
+    // 課題:クーポン詳細ページでもお気に入りの追加削除
+    override fun onClickItem(shop: Shop) {
+        onClickItem(FavoriteShop().apply {
+            id = shop.id
+            name = shop.name
+            imageUrl = shop.logoImage
+            url = if (shop.couponUrls.sp.isNotEmpty()) shop.couponUrls.sp else shop.couponUrls.pc
+        })
     }
 
     /**

@@ -9,7 +9,7 @@ class ViewPagerAdapter(fragmentActivity: FragmentActivity) :
 
     val titleIds = listOf(R.string.tab_title_api, R.string.tab_title_favorite)
 
-    public val fragments = listOf(ApiFragment(), FavoriteFragment())
+    val fragments = listOf(ApiFragment(), FavoriteFragment())
 
     override fun getItemCount(): Int {
         return fragments.size

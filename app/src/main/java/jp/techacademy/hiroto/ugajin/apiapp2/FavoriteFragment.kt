@@ -18,6 +18,12 @@ class FavoriteFragment: Fragment() {
     // FavoriteFragment -> MainActivity に削除を通知する
     private var fragmentCallback: FragmentCallback? = null
 
+    // 課題:クーポン詳細ページでもお気に入りの追加削除
+    override fun onResume() {
+        super.onResume()
+        updateData()
+    }
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         if (context is FragmentCallback) {

@@ -23,7 +23,9 @@ data class Shop(
     @Json(name = "logo_image")
     val logoImage: String,
     @Json(name = "name")
-    val name: String
+    val name: String,
+    @Json(name = "address") // 課題：住所を表示
+    var address: String // 課題：住所を表示
 )
 
 @JsonClass(generateAdapter = true)

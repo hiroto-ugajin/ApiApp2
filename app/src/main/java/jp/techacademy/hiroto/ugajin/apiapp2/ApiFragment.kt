@@ -38,6 +38,12 @@ class ApiFragment: Fragment() {
     private var isLoading = false
     // -----追加ここまで
 
+    // 課題:クーポン詳細ページでもお気に入りの追加削除
+    override fun onResume() {
+        super.onResume()
+        updateView()
+    }
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         if (context is FragmentCallback) {

@@ -2,7 +2,9 @@ package jp.techacademy.hiroto.ugajin.apiapp2
 
 interface FragmentCallback {
     // Itemを押したときの処理
-    fun onClickItem(url: String)
+//    fun onClickItem(url: String)
+    fun onClickItem(favoriteShop: FavoriteShop) // 課題:クーポン詳細ページでもお気に入りの追加削除
+    fun onClickItem(shop: Shop) // 課題:クーポン詳細ページでもお気に入りの追加削除
 
     // お気に入り追加時の処理
     fun onAddFavorite(shop: Shop)

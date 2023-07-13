@@ -5,8 +5,10 @@ import io.realm.kotlin.RealmConfiguration
 import io.realm.kotlin.ext.query
 import io.realm.kotlin.types.RealmObject
 import io.realm.kotlin.types.annotations.PrimaryKey
+import java.io.Serializable
 
-open class FavoriteShop(id: String, imageUrl: String, name: String, url: String) : RealmObject {
+open class FavoriteShop(id: String, imageUrl: String, name: String, url: String) : RealmObject,
+    Serializable {// 課題:クーポン詳細ページでもお気に入りの追加削除
     @PrimaryKey
     var id: String = ""
     var imageUrl: String = ""
@@ -98,20 +100,20 @@ open class FavoriteShop(id: String, imageUrl: String, name: String, url: String)
             realm.close()
         }
 
-        /**
-         * 指定されたURLがお気に入りの中に存在するか判定する
-         */
-        fun isUrlInFavorites(url: String): Boolean {
-            val favoriteShops = findAll()
-            return favoriteShops.any { it.url == url }
-        }
-
-        /**
-         * 指定されたURLのお気に入りショップを取得する
-         */
-        fun findByUrl(url: String): FavoriteShop? {
-            val favoriteShops = findAll()
-            return favoriteShops.find { it.url == url }
-        }
+//        /**
+//         * 指定されたURLがお気に入りの中に存在するか判定する
+//         */
+//        fun isUrlInFavorites(url: String): Boolean {
+//            val favoriteShops = findAll()
+//            return favoriteShops.any { it.url == url }
+//        }
+//
+//        /**
+//         * 指定されたURLのお気に入りショップを取得する
+//         */
+//        fun findByUrl(url: String): FavoriteShop? {
+//            val favoriteShops = findAll()
+//            return favoriteShops.find { it.url == url }
+//        }
     }
 }
